@@ -1,17 +1,21 @@
-const mongoose = require("mongoose");
-const { mongodbURL } = require("../secret");
+import mongoose from "mongoose";
+import { databaseName } from "../constants.js";
 
-const connectDataBase = async (options = {}) => {
+const connectDataBase = async () => {
   try {
-    await mongoose.connect(mongodbURL, options);
-    console.log("info", "Connected to MongoDB successfully");
-    console.log("info", `Connected to ${mongodbURL}`);
-    mongoose.connection.on("error", (error) => {
-      console.error("error", "DB connection error : ", error);
-    });
+    const connectionInstance = await mongoose.connect(
+      `${process.env.MONGODB_URL}/${databaseName}`
+    );
+    console.log("info", "Connected to MongoDB successfully !!!");
+    console.log("info", `Connected to ${connectionInstance.connection.host}`);
+    console.log(
+      "info",
+      `Connected to ${process.env.MONGODB_URL}/${databaseName}`
+    );
   } catch (error) {
-    console.error("error", "Can't connect to DB : ", error.toString());
+    console.log(`MongoDB connection failed : ${error}`);
+    process.exit(1);
   }
 };
 
-module.exports = connectDataBase;
+export default connectDataBase;

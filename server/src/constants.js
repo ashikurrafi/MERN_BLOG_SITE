@@ -1,1 +1,1 @@
-export const databaseName = "Blog";
+export const databaseName = "Story";
